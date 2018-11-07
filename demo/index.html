@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>CSSTransition demo</title>
+    <style>
+      #popover {
+        width: 100px;
+        height: 100px;
+        background: #eee;
+        display: none;
+        transform: translateY(-5px);
+        transition: all 0.3s ease;
+        opacity: 0;
+      }
+
+      #popover.enter,
+      #popover.exit,
+      #popover.exit-active {
+        display: block;
+      }
+
+      #popover.enter-active,
+      #popover.enter-done,
+      #popover.exit {
+        display: block;
+        opacity: 1;
+        transform: translateY(0);
+      }
+    </style>
+  </head>
+  <body>
+    <button id="button">hover me</button>
+    <div id="popover">Hello World</div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
