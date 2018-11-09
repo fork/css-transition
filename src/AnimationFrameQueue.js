@@ -10,21 +10,21 @@
 class AnimationFrameQueue {
   constructor() {
     this.queue = [];
-    this.tick = this.tick.bind(this);
+    this.onAnimationFrame = this.onAnimationFrame.bind(this);
   }
 
   /**
-   * requestAnimationFrame callback
+   * Callback for requestAnimationFrame
    * @private
    * @returns {void}
    */
-  tick() {
+  onAnimationFrame() {
     if (this.queue.length > 0) {
       this.dequeue()();
     }
 
     if (this.queue.length > 0) {
-      requestAnimationFrame(this.tick);
+      requestAnimationFrame(this.onAnimationFrame);
     }
   }
 
@@ -45,7 +45,7 @@ class AnimationFrameQueue {
     this.queue.push(fn);
 
     if (this.queue.length === 1) {
-      requestAnimationFrame(this.tick);
+      requestAnimationFrame(this.onAnimationFrame);
     }
   }
 
