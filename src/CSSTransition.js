@@ -47,9 +47,12 @@ class CSSTransition {
     this.element.removeEventListener('transitionend', this.onTransitionEnd);
 
     CSSTransition.allowedDirections.forEach(direction => {
-      removeClass(this.element, `${this.prefix}${direction}`);
-      removeClass(this.element, `${this.prefix}${direction}-active`);
-      removeClass(this.element, `${this.prefix}${direction}-done`);
+      removeClass(
+        this.element,
+        `${this.prefix}${direction}`,
+        `${this.prefix}${direction}-active`,
+        `${this.prefix}${direction}-done`
+      );
     });
   }
 
@@ -62,8 +65,10 @@ class CSSTransition {
     clearTimeout(this.timeout);
     this.element.removeEventListener('transitionend', this.onTransitionEnd);
 
-    removeClass(this.element, `${this.prefix}${this.direction}-active`);
-    addClass(this.element, `${this.prefix}${this.direction}-done`);
+    this.queue.enqueue(() => {
+      removeClass(this.element, `${this.prefix}${this.direction}-active`);
+      addClass(this.element, `${this.prefix}${this.direction}-done`);
+    });
   }
 
   /**

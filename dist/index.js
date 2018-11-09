@@ -322,9 +322,7 @@ function () {
       clearTimeout(this.timeout);
       this.element.removeEventListener('transitionend', this.onTransitionEnd);
       CSSTransition.allowedDirections.forEach(function (direction) {
-        (0, _DOMHelpers.removeClass)(_this.element, "".concat(_this.prefix).concat(direction));
-        (0, _DOMHelpers.removeClass)(_this.element, "".concat(_this.prefix).concat(direction, "-active"));
-        (0, _DOMHelpers.removeClass)(_this.element, "".concat(_this.prefix).concat(direction, "-done"));
+        (0, _DOMHelpers.removeClass)(_this.element, "".concat(_this.prefix).concat(direction), "".concat(_this.prefix).concat(direction, "-active"), "".concat(_this.prefix).concat(direction, "-done"));
       });
     }
     /**
@@ -336,10 +334,14 @@ function () {
   }, {
     key: "onTransitionEnd",
     value: function onTransitionEnd() {
+      var _this2 = this;
+
       clearTimeout(this.timeout);
       this.element.removeEventListener('transitionend', this.onTransitionEnd);
-      (0, _DOMHelpers.removeClass)(this.element, "".concat(this.prefix).concat(this.direction, "-active"));
-      (0, _DOMHelpers.addClass)(this.element, "".concat(this.prefix).concat(this.direction, "-done"));
+      this.queue.enqueue(function () {
+        (0, _DOMHelpers.removeClass)(_this2.element, "".concat(_this2.prefix).concat(_this2.direction, "-active"));
+        (0, _DOMHelpers.addClass)(_this2.element, "".concat(_this2.prefix).concat(_this2.direction, "-done"));
+      });
     }
     /**
      * Callback for when the transition runs into timeout
@@ -363,7 +365,7 @@ function () {
   }, {
     key: "run",
     value: function run(direction) {
-      var _this2 = this;
+      var _this3 = this;
 
       if (CSSTransition.allowedDirections.indexOf(direction) === -1) {
         throw new Error("Unknown direction: ".concat(direction));
@@ -374,12 +376,12 @@ function () {
       this.cleanup(); // 2. add ${this.direction} class on first animation frame
 
       this.queue.enqueue(function () {
-        (0, _DOMHelpers.addClass)(_this2.element, "".concat(_this2.prefix).concat(_this2.direction));
+        (0, _DOMHelpers.addClass)(_this3.element, "".concat(_this3.prefix).concat(_this3.direction));
       }); // 3. add ${this.direction}-active class on next animation frame
 
       this.queue.enqueue(function () {
-        (0, _DOMHelpers.removeClass)(_this2.element, "".concat(_this2.prefix).concat(_this2.direction));
-        (0, _DOMHelpers.addClass)(_this2.element, "".concat(_this2.prefix).concat(_this2.direction, "-active"));
+        (0, _DOMHelpers.removeClass)(_this3.element, "".concat(_this3.prefix).concat(_this3.direction));
+        (0, _DOMHelpers.addClass)(_this3.element, "".concat(_this3.prefix).concat(_this3.direction, "-active"));
       }); // 4.1. add enter-done class on transition end
 
       this.element.addEventListener('transitionend', this.onTransitionEnd); // 4.2. or after timeout
