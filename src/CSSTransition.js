@@ -86,7 +86,7 @@ class CSSTransition {
    * Apply CSS transition stages
    * @private
    * @param {string} direction - One of CSSTransition.allowedDirections
-   * @returns {void}
+   * @returns {Promise} Promise which resolves when the animation has finished
    */
   run(direction) {
     if (CSSTransition.allowedDirections.indexOf(direction) === -1) {
