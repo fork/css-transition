@@ -2,14 +2,20 @@
   "name": "css-transition",
   "version": "0.1.0",
   "description": "Apply a CSS class for each stage of a CSS transition",
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "author": "Fork Unstable Media GmbH <obj@fork.de>",
   "license": "MIT",
   "scripts": {
-    "start": "parcel demo/index.html --open"
+    "start": "parcel demo/index.html --open",
+    "build": "parcel build --no-minify --global CSSTransition src/index.js"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged; npm run build; git add dist/"
+    }
   },
   "lint-staged": {
-    "*.js": ["eslint --quiet --fix", "git add"]
+    "src/*.js": ["eslint --quiet --fix", "git add"]
   },
   "devDependencies": {
     "eslint": "^5.8.0",
