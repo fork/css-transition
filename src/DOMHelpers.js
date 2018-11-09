@@ -7,9 +7,7 @@
 export const addClass = (element, ...classNames) =>
   classNames
     .filter(className => !element.classList.contains(className))
-    .forEach(className => {
-      element.classList.add(className);
-    });
+    .forEach(className => element.classList.add(className));
 
 /**
  * Removes classes from a DOM element
@@ -20,6 +18,4 @@ export const addClass = (element, ...classNames) =>
 export const removeClass = (element, ...classNames) =>
   classNames
     .filter(className => element.classList.contains(className))
-    .forEach(className => {
-      element.classList.remove(className);
-    });
+    .forEach(className => element.classList.remove(className));
