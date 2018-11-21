@@ -9,7 +9,7 @@ import { addClass, removeClass } from './DOMHelpers';
  * 2. Active: Used to set the actual transitions, e.g. opacity: 1;
  * 3. Done: Used to consist the result of active, e.g. opacity: 1;
  *
- * Start and active stage get queued via requestAnimationFrame.
+ * All stages get queued via requestAnimationFrame.
  *
  * The done stage gets applied after the first transitionend event or
  * when the animationTimeout is reached.
@@ -46,14 +46,14 @@ class CSSTransition {
     clearTimeout(this.timeout);
     this.element.removeEventListener('transitionend', this.onTransitionEnd);
 
-    CSSTransition.allowedDirections.forEach(direction => {
+    CSSTransition.allowedDirections.forEach(direction =>
       removeClass(
         this.element,
         `${this.prefix}${direction}`,
         `${this.prefix}${direction}-active`,
         `${this.prefix}${direction}-done`
-      );
-    });
+      )
+    );
   }
 
   /**
@@ -77,12 +77,14 @@ class CSSTransition {
    * @returns {void}
    */
   onTransitionTimeout() {
-    console.warn(
-      `CSSTransition: Timeout fired on '${
-        this.direction
-      }'. Please check whether there is a transition on`,
-      this.element
-    );
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn(
+        `CSSTransition: Timeout fired on '${
+          this.direction
+        }'. Please check whether there is a transition on`,
+        this.element
+      );
+    }
 
     this.onTransitionEnd();
   }
@@ -94,7 +96,10 @@ class CSSTransition {
    * @returns {void}
    */
   run(direction) {
-    if (CSSTransition.allowedDirections.indexOf(direction) === -1) {
+    if (
+      process.env.NODE_ENV !== 'production' &&
+      CSSTransition.allowedDirections.indexOf(direction) === -1
+    ) {
       throw new Error(`Unknown direction: ${direction}`);
     }
 
@@ -104,9 +109,7 @@ class CSSTransition {
     this.cleanup();
 
     // 2. add ${this.direction} class on first animation frame
-    this.queue.enqueue(() => {
-      addClass(this.element, `${this.prefix}${this.direction}`);
-    });
+    this.queue.enqueue(() => addClass(this.element, `${this.prefix}${this.direction}`));
 
     // 3. add ${this.direction}-active class on next animation frame
     this.queue.enqueue(() => {

@@ -13,6 +13,10 @@ There is a simple usage demo which can be run as follows:
     yarn
     yarn start
 
+## Tricks
+
+-   Apply `pointer-events: none;` during `.exit` and `.exit-active`
+
 ## Creating a release
 
 Certain steps need to be done in order to create a new release:
