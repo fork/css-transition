@@ -1,13 +1,13 @@
 {
   "name": "css-transition",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Apply a CSS class for each stage of a CSS transition",
   "main": "dist/index.js",
   "author": "Fork Unstable Media GmbH <obj@fork.de>",
   "license": "MIT",
   "scripts": {
     "start": "parcel demo/index.html --open",
-    "build": "parcel build --no-minify --global CSSTransition src/index.js"
+    "build": "bili --filename index.js"
   },
   "husky": {
     "hooks": {
@@ -18,15 +18,16 @@
     "src/*.js": ["eslint --quiet --fix", "git add"]
   },
   "devDependencies": {
-    "eslint": "^5.8.0",
+    "bili": "^3.4.2",
+    "eslint": "^5.9.0",
     "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-config-prettier": "^3.1.0",
+    "eslint-config-prettier": "^3.3.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-prettier": "^3.0.0",
-    "husky": "^1.1.3",
-    "lint-staged": "^8.0.4",
+    "husky": "^1.2.0",
+    "lint-staged": "^8.1.0",
     "parcel-bundler": "^1.10.3",
-    "prettier": "^1.15.1",
+    "prettier": "^1.15.2",
     "rimraf": "^2.6.2"
   }
 }

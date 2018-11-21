@@ -13,6 +13,10 @@ There is a simple usage demo which can be run as follows:
     yarn
     yarn start
 
+## Tricks
+
+-   Apply `pointer-events: none;` during `.exit` and `.exit-active`
+
 ## Creating a release
 
 Certain steps need to be done in order to create a new release:
@@ -21,7 +25,6 @@ Certain steps need to be done in order to create a new release:
 1. Start a new release using `git flow release start [version number]`
 1. Update the `package.json` version
 1. Update the `CHANGELOG.md`
-1. Run `yarn build` to update `dist/index.js`
-1. Commit changes: `git commit -a -m "Prepare release [version number]"`
+1. Commit changes: `git commit -a -m "Prepare release [version number]"`. This should automatically update `dist/index.js`
 1. Finish release using `git flow release finish`
 1. Push all changes: `git push origin --all`
