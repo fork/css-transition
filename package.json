@@ -1,6 +1,6 @@
 {
   "name": "css-transition",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Apply a CSS class for each stage of a CSS transition",
   "main": "dist/index.js",
   "author": "Fork Unstable Media GmbH <obj@fork.de>",
