@@ -8,12 +8,16 @@
     "transition",
     "transitions"
   ],
-  "main": "dist/index.js",
+  "license": "MIT",
+  "author": "Fork Unstable Media GmbH <obj@fork.de>",
   "files": [
     "dist"
   ],
-  "author": "Fork Unstable Media GmbH <obj@fork.de>",
-  "license": "MIT",
+  "main": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fork/css-transition.git"
+  },
   "scripts": {
     "start": "parcel demo/index.html --open",
     "build": "babel src -d dist",
@@ -45,9 +49,5 @@
     "parcel-bundler": "^1.12.3",
     "prettier": "^1.16.4",
     "rimraf": "^2.6.3"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://lab.fork.de/ltechel/css-transition.git"
   }
 }
