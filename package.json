@@ -1,6 +1,6 @@
 {
   "name": "@4rk/css-transition",
-  "version": "0.1.4",
+  "version": "1.0.0",
   "description": "Apply a CSS class for each stage of a CSS transition",
   "keywords": [
     "animation",
