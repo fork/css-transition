@@ -2,17 +2,26 @@
   "name": "@4rk/css-transition",
   "version": "0.1.4",
   "description": "Apply a CSS class for each stage of a CSS transition",
+  "keywords": [
+    "animation",
+    "css",
+    "transition",
+    "transitions"
+  ],
   "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
   "author": "Fork Unstable Media GmbH <obj@fork.de>",
   "license": "MIT",
   "scripts": {
     "start": "parcel demo/index.html --open",
-    "build": "bili --file-name index.js",
+    "build": "babel src -d dist",
     "release": "kacl prerelease && kacl release && prettier --write CHANGELOG.md"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged; rimraf dist/; npm run build; git add dist/"
+      "pre-commit": "lint-staged"
     }
   },
   "lint-staged": {
@@ -22,8 +31,10 @@
     ]
   },
   "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.4.0",
+    "@babel/preset-env": "^7.4.2",
     "@brightcove/kacl": "^0.1.6",
-    "bili": "^4.7.1",
     "eslint": "^5.15.3",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-config-prettier": "^4.1.0",

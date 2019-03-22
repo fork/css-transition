@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 -   DOM helpers are now simplified and marked as private
 -   Make documentation more helpful
 -   Dependency update
+-   Replace bili with babel for package cjs building, do not include build in repo
 
 ## [0.1.3] - 2018-11-21
 
