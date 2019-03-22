@@ -5,13 +5,14 @@ import { addClass, removeClass } from './DOMHelpers';
  * Applies a CSS class for each stage of a CSS transition
  *
  * A transition consists of three stages:
- * 1. Start: Used to set initial transition state, e.g. display: block; opacity: 0;
- * 2. Active: Used to set the actual transitions, e.g. opacity: 1;
- * 3. Done: Used to consist the result of active, e.g. opacity: 1;
  *
- * All stages get queued via requestAnimationFrame.
+ * 1. **Start:** Used to set initial transition state, e.g. `display: block; opacity: 0;`
+ * 2. **Active:** Used to set the actual transitions, e.g. `opacity: 1;`
+ * 3. **Done:** Used to consist the result of active, e.g. `opacity: 1;` Used in exit transition to set `display: none;`
  *
- * The done stage gets applied after the first transitionend event or
+ * All stages get queued via `requestAnimationFrame`.
+ *
+ * The done stage gets applied after the first `transitionend` event or
  * when the animationTimeout is reached.
  */
 class CSSTransition {
@@ -20,14 +21,20 @@ class CSSTransition {
   }
 
   /**
+   * Create a CSSTransition
    * @param {HTMLElement} element - Element on which to apply the CSS classes
-   * @param {string} prefix - Default: ''. Sets a prefix on all CSS classes
-   * @param {number} animationTimeout - Default: 500. Time to wait for transitionend to happen
+   * @param {Object} config - Configuration
+   * @param {number} [config.animationTimeout=500] - Time to wait for `transitionend` to happen
+   * @param {string} [config.prefix=''] - Sets a prefix on all CSS classes
    */
-  constructor(element, prefix = '', animationTimeout = 500) {
+  constructor(element, config) {
     this.element = element;
-    this.prefix = prefix;
-    this.animationTimeout = animationTimeout;
+
+    this.config = {
+      animationTimeout: 500,
+      prefix: '',
+      ...config
+    };
 
     this.queue = new AnimationFrameQueue();
 
@@ -49,9 +56,9 @@ class CSSTransition {
     CSSTransition.allowedDirections.forEach(direction =>
       removeClass(
         this.element,
-        `${this.prefix}${direction}`,
-        `${this.prefix}${direction}-active`,
-        `${this.prefix}${direction}-done`
+        `${this.config.prefix}${direction}`,
+        `${this.config.prefix}${direction}-active`,
+        `${this.config.prefix}${direction}-done`
       )
     );
   }
@@ -66,8 +73,8 @@ class CSSTransition {
     this.element.removeEventListener('transitionend', this.onTransitionEnd);
 
     this.queue.enqueue(() => {
-      removeClass(this.element, `${this.prefix}${this.direction}-active`);
-      addClass(this.element, `${this.prefix}${this.direction}-done`);
+      removeClass(this.element, `${this.config.prefix}${this.direction}-active`);
+      addClass(this.element, `${this.config.prefix}${this.direction}-done`);
     });
   }
 
@@ -79,9 +86,9 @@ class CSSTransition {
   onTransitionTimeout() {
     if (process.env.NODE_ENV !== 'production') {
       console.warn(
-        `CSSTransition: Timeout fired on '${
-          this.direction
-        }'. Please check whether there is a transition on`,
+        `CSSTransition: Timeout fired on '${this.direction} after ${
+          this.config.animationTimeout
+        }ms'. Please check whether there is a transition on`,
         this.element
       );
     }
@@ -109,19 +116,19 @@ class CSSTransition {
     this.cleanup();
 
     // 2. add ${this.direction} class on first animation frame
-    this.queue.enqueue(() => addClass(this.element, `${this.prefix}${this.direction}`));
+    this.queue.enqueue(() => addClass(this.element, `${this.config.prefix}${this.direction}`));
 
     // 3. add ${this.direction}-active class on next animation frame
     this.queue.enqueue(() => {
-      removeClass(this.element, `${this.prefix}${this.direction}`);
-      addClass(this.element, `${this.prefix}${this.direction}-active`);
+      removeClass(this.element, `${this.config.prefix}${this.direction}`);
+      addClass(this.element, `${this.config.prefix}${this.direction}-active`);
     });
 
     // 4.1. add enter-done class on transition end
     this.element.addEventListener('transitionend', this.onTransitionEnd);
 
     // 4.2. or after timeout
-    this.timeout = setTimeout(this.onTransitionTimeout, this.animationTimeout);
+    this.timeout = setTimeout(this.onTransitionTimeout, this.config.animationTimeout);
   }
 
   /**
