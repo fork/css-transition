@@ -20,7 +20,7 @@
   },
   "scripts": {
     "start": "parcel demo/index.html --open",
-    "build": "babel src -d dist",
+    "build": "rimraf dist/; babel src -d dist",
     "release": "kacl prerelease && kacl release && prettier --write CHANGELOG.md"
   },
   "husky": {

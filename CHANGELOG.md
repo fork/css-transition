@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+-   Clean `dist/` before build
+-   Use `plugin:prettier/recommended` for eslint
+-   Cosmetic transition timeout warning change
+
 ## [1.0.0] - 2019-03-22
 
 ### Changed

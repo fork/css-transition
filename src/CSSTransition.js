@@ -86,9 +86,9 @@ class CSSTransition {
   onTransitionTimeout() {
     if (process.env.NODE_ENV !== 'production') {
       console.warn(
-        `CSSTransition: Timeout fired on '${this.direction} after ${
+        `CSSTransition: Timeout fired on '${this.direction}' after ${
           this.config.animationTimeout
-        }ms'. Please check whether there is a transition on`,
+        }ms. Please check whether there is a transition on`,
         this.element
       );
     }
