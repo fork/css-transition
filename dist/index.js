@@ -25,17 +25,20 @@ function _createClass(Constructor, protoProps, staticProps) {
 }
 
 /**
- * FIFO-Queue which automatically dequeues on requestAnimationFrame
+ * FIFO-Queue which automatically dequeues on `requestAnimationFrame`
  *
- * This helper class is useful to run multiple requestAnimationFrame-based
+ * This helper class is useful to run multiple `requestAnimationFrame`-based
  * steps sequentially while being able to cancel all of them at any time.
  *
- * For performance reasons, requestAnimationFrame is only called while
+ * For performance reasons, `requestAnimationFrame` is only called while
  * the queue is not empty.
  */
 var AnimationFrameQueue =
 /*#__PURE__*/
 function () {
+  /**
+   * Create an AnimationFrameQueue
+   */
   function AnimationFrameQueue() {
     _classCallCheck(this, AnimationFrameQueue);
 
@@ -43,7 +46,7 @@ function () {
     this.onAnimationFrame = this.onAnimationFrame.bind(this);
   }
   /**
-   * Callback for requestAnimationFrame
+   * Callback for `requestAnimationFrame`
    * @private
    * @returns {void}
    */
@@ -71,7 +74,7 @@ function () {
       this.queue = [];
     }
     /**
-     * Enqueue function onto requestAnimationFrame queue
+     * Enqueue function onto `requestAnimationFrame` queue
      * @param {function} fn - Function which should be queued
      * @returns {void}
      */
@@ -102,6 +105,7 @@ function () {
 
 /**
  * Adds classes to a DOM element
+ * @private
  * @param {Element} element - Element the classes should get added to
  * @param {string} classNames - One or more classnames
  * @returns {void}
@@ -111,14 +115,13 @@ var addClass = function addClass(element) {
     classNames[_key - 1] = arguments[_key];
   }
 
-  return classNames.filter(function (className) {
-    return !element.classList.contains(className);
-  }).forEach(function (className) {
+  return classNames.forEach(function (className) {
     return element.classList.add(className);
   });
 };
 /**
  * Removes classes from a DOM element
+ * @private
  * @param {Element} element - Element the classes should get removed from
  * @param {string} classNames - One or more classnames
  * @returns {void}
@@ -129,9 +132,7 @@ var removeClass = function removeClass(element) {
     classNames[_key2 - 1] = arguments[_key2];
   }
 
-  return classNames.filter(function (className) {
-    return element.classList.contains(className);
-  }).forEach(function (className) {
+  return classNames.forEach(function (className) {
     return element.classList.remove(className);
   });
 };
@@ -140,13 +141,14 @@ var removeClass = function removeClass(element) {
  * Applies a CSS class for each stage of a CSS transition
  *
  * A transition consists of three stages:
- * 1. Start: Used to set initial transition state, e.g. display: block; opacity: 0;
- * 2. Active: Used to set the actual transitions, e.g. opacity: 1;
- * 3. Done: Used to consist the result of active, e.g. opacity: 1;
  *
- * All stages get queued via requestAnimationFrame.
+ * 1. **Start:** Used to set initial transition state, e.g. `display: block; opacity: 0;`
+ * 2. **Active:** Used to set the actual transitions, e.g. `opacity: 1;`
+ * 3. **Done:** Used to consist the result of active, e.g. `opacity: 1;` Used in exit transition to set `display: none;`
  *
- * The done stage gets applied after the first transitionend event or
+ * All stages get queued via `requestAnimationFrame`.
+ *
+ * The done stage gets applied after the first `transitionend` event or
  * when the animationTimeout is reached.
  */
 
@@ -159,22 +161,23 @@ function () {
       return ['enter', 'exit'];
     }
     /**
+     * Create a CSSTransition
      * @param {HTMLElement} element - Element on which to apply the CSS classes
-     * @param {string} prefix - Default: ''. Sets a prefix on all CSS classes
-     * @param {number} animationTimeout - Default: 500. Time to wait for transitionend to happen
+     * @param {Object} config - Configuration
+     * @param {number} [config.animationTimeout=500] - Time to wait for `transitionend` to happen
+     * @param {string} [config.prefix=''] - Sets a prefix on all CSS classes
      */
 
   }]);
 
-  function CSSTransition(element) {
-    var prefix = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
-    var animationTimeout = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 500;
-
+  function CSSTransition(element, config) {
     _classCallCheck(this, CSSTransition);
 
     this.element = element;
-    this.prefix = prefix;
-    this.animationTimeout = animationTimeout;
+    this.config = Object.assign({
+      animationTimeout: 500,
+      prefix: ''
+    }, config);
     this.queue = new AnimationFrameQueue();
     this.onTransitionEnd = this.onTransitionEnd.bind(this);
     this.onTransitionTimeout = this.onTransitionTimeout.bind(this);
@@ -195,7 +198,7 @@ function () {
       clearTimeout(this.timeout);
       this.element.removeEventListener('transitionend', this.onTransitionEnd);
       CSSTransition.allowedDirections.forEach(function (direction) {
-        return removeClass(_this.element, "".concat(_this.prefix).concat(direction), "".concat(_this.prefix).concat(direction, "-active"), "".concat(_this.prefix).concat(direction, "-done"));
+        return removeClass(_this.element, "".concat(_this.config.prefix).concat(direction), "".concat(_this.config.prefix).concat(direction, "-active"), "".concat(_this.config.prefix).concat(direction, "-done"));
       });
     }
     /**
@@ -212,8 +215,8 @@ function () {
       clearTimeout(this.timeout);
       this.element.removeEventListener('transitionend', this.onTransitionEnd);
       this.queue.enqueue(function () {
-        removeClass(_this2.element, "".concat(_this2.prefix).concat(_this2.direction, "-active"));
-        addClass(_this2.element, "".concat(_this2.prefix).concat(_this2.direction, "-done"));
+        removeClass(_this2.element, "".concat(_this2.config.prefix).concat(_this2.direction, "-active"));
+        addClass(_this2.element, "".concat(_this2.config.prefix).concat(_this2.direction, "-done"));
       });
     }
     /**
@@ -226,7 +229,7 @@ function () {
     key: "onTransitionTimeout",
     value: function onTransitionTimeout() {
       if (process.env.NODE_ENV !== 'production') {
-        console.warn("CSSTransition: Timeout fired on '".concat(this.direction, "'. Please check whether there is a transition on"), this.element);
+        console.warn("CSSTransition: Timeout fired on '".concat(this.direction, " after ").concat(this.config.animationTimeout, "ms'. Please check whether there is a transition on"), this.element);
       }
 
       this.onTransitionEnd();
@@ -252,17 +255,17 @@ function () {
       this.cleanup(); // 2. add ${this.direction} class on first animation frame
 
       this.queue.enqueue(function () {
-        return addClass(_this3.element, "".concat(_this3.prefix).concat(_this3.direction));
+        return addClass(_this3.element, "".concat(_this3.config.prefix).concat(_this3.direction));
       }); // 3. add ${this.direction}-active class on next animation frame
 
       this.queue.enqueue(function () {
-        removeClass(_this3.element, "".concat(_this3.prefix).concat(_this3.direction));
-        addClass(_this3.element, "".concat(_this3.prefix).concat(_this3.direction, "-active"));
+        removeClass(_this3.element, "".concat(_this3.config.prefix).concat(_this3.direction));
+        addClass(_this3.element, "".concat(_this3.config.prefix).concat(_this3.direction, "-active"));
       }); // 4.1. add enter-done class on transition end
 
       this.element.addEventListener('transitionend', this.onTransitionEnd); // 4.2. or after timeout
 
-      this.timeout = setTimeout(this.onTransitionTimeout, this.animationTimeout);
+      this.timeout = setTimeout(this.onTransitionTimeout, this.config.animationTimeout);
     }
     /**
      * Apply enter CSS transition stages

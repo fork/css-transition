@@ -1,20 +1,23 @@
 /**
- * FIFO-Queue which automatically dequeues on requestAnimationFrame
+ * FIFO-Queue which automatically dequeues on `requestAnimationFrame`
  *
- * This helper class is useful to run multiple requestAnimationFrame-based
+ * This helper class is useful to run multiple `requestAnimationFrame`-based
  * steps sequentially while being able to cancel all of them at any time.
  *
- * For performance reasons, requestAnimationFrame is only called while
+ * For performance reasons, `requestAnimationFrame` is only called while
  * the queue is not empty.
  */
 class AnimationFrameQueue {
+  /**
+   * Create an AnimationFrameQueue
+   */
   constructor() {
     this.queue = [];
     this.onAnimationFrame = this.onAnimationFrame.bind(this);
   }
 
   /**
-   * Callback for requestAnimationFrame
+   * Callback for `requestAnimationFrame`
    * @private
    * @returns {void}
    */
@@ -37,7 +40,7 @@ class AnimationFrameQueue {
   }
 
   /**
-   * Enqueue function onto requestAnimationFrame queue
+   * Enqueue function onto `requestAnimationFrame` queue
    * @param {function} fn - Function which should be queued
    * @returns {void}
    */
